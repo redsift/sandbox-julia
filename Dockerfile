@@ -18,6 +18,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 # Copy support files across
 COPY root /
 
+RUN julia -e "Pkg.resolve()"
+
 VOLUME /run/dagger/sift
 
 WORKDIR /run/dagger/sift
