@@ -1,0 +1,28 @@
+machine:
+  environment:
+    CONTAINER_NAME: quay.io/redsift/sandbox-julia
+  pre:
+    - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
+    - sudo chmod 0755 /usr/bin/docker  
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker build -t julia .
+    
+test:
+  override:
+    - docker run -v $PWD/test:/run/dagger/sift -e TEST=true julia /usr/bin/redsift/bootstrap.jl 0 2
+  
+deployment:
+  production:
+    branch: master  
+    commands:
+      - docker login -e $QUAY_EMAIL -u $QUAY_USER -p $QUAY_PASS quay.io
+      - | 
+        VERSION=$(docker run julia --version | cut -d' ' -f3)
+        echo "Tagging as $CONTAINER_NAME:$VERSION"
+        docker tag julia:latest $CONTAINER_NAME:$VERSION
+        docker push $CONTAINER_NAME 
