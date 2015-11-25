@@ -1,6 +1,7 @@
 machine:
   environment:
     CONTAINER_NAME: quay.io/redsift/sandbox-julia
+    NANO_MSG: 0.8-beta
   pre:
     - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
     - sudo chmod 0755 /usr/bin/docker  
@@ -9,6 +10,8 @@ machine:
 
 dependencies:
   override:
+    - curl -L  https://github.com/nanomsg/nanomsg/archive/$NANO_MSG.tar.gz | tar xz
+    - cd nanomsg-$NANO_MSG; sh autogen.sh && ./configure --prefix=$(readlink -f ./package) && make && make check && sudo make install && cp -r ./package/* ../root/. && mv ../root/include ../root/usr  
     - docker info
     - docker build -t julia .
     
@@ -22,7 +25,7 @@ deployment:
     commands:
       - docker login -e $QUAY_EMAIL -u $QUAY_USER -p $QUAY_PASS quay.io
       - | 
-        VERSION=$(docker run julia --version | cut -d' ' -f3)
+        VERSION=v$(docker run julia --version | cut -d' ' -f3)
         echo "Tagging as $CONTAINER_NAME:$VERSION"
         docker tag julia:latest $CONTAINER_NAME:$VERSION
         docker push $CONTAINER_NAME 

@@ -1,4 +1,4 @@
-FROM ubuntu:15.04
+FROM ubuntu:15.10
 MAINTAINER Rahul Powar email: rahul@redsift.io version: 1.1.101
 
 ENV SIFT_ROOT="/run/dagger/sift" IPC_ROOT="/run/dagger/ipc"
@@ -18,7 +18,10 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 # Copy support files across
 COPY root /
 
-RUN julia -e "Pkg.resolve()"
+# Update .so cache
+RUN ldconfig
+
+RUN julia -e "Pkg.add(\"JSON\");import JSON"
 
 VOLUME /run/dagger/sift
 
