@@ -17,6 +17,7 @@ dependencies:
     
 test:
   override:
+    - docker run -v $PWD/test:/run/dagger/sift julia /usr/bin/redsift/install.jl
     - docker run -v $PWD/test:/run/dagger/sift -e TEST=true julia /usr/bin/redsift/bootstrap.jl 0 2
   
 deployment:
