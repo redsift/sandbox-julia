@@ -2,6 +2,7 @@ FROM ubuntu:15.10
 MAINTAINER Rahul Powar email: rahul@redsift.io version: 1.1.101
 
 ENV SIFT_ROOT="/run/dagger/sift" IPC_ROOT="/run/dagger/ipc"
+LABEL io.redsift.dagger.init="/usr/bin/redsift/install.jl" io.redsift.dagger.run="/usr/bin/redsift/bootstrap.jl"
 
 # Fix for ubuntu to ensure /etc/default/locale is present
 RUN update-locale
@@ -12,7 +13,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 	apt-get install -y software-properties-common && \
 	add-apt-repository -y ppa:staticfloat/juliareleases && \
 	apt-get update && \
-	apt-get install -y julia && \
+	apt-get install -y julia build-essential && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Copy support files across
@@ -27,4 +28,4 @@ VOLUME /run/dagger/sift
 
 WORKDIR /run/dagger/sift
 
-ENTRYPOINT [ "/usr/bin/julia", "-q" ]
+ENTRYPOINT [ "/usr/bin/julia", "-q", "-J", "/run/dagger/sift/sift.ji"  ]

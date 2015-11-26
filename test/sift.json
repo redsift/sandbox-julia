@@ -4,21 +4,27 @@
 		{
 			"#": "Test Node 1",
 			"implementation": {
-				"julia": "node1.jl"  
+				"julia": "server/node1.jl"  
 			}
 		},
 		{
 			"#": "Missing Node",
 			"implementation": {
-				"julia": "node-missing.jl"  
+				"julia": "server/node-missing.jl"  
 			}
 		},
 		{
 			"#": "Test Node 2",
 			"implementation": {
-				"julia": "node2.jl"  
+				"julia": "server/node2.jl"  
 			}
-		}		
+		},
+		{
+			"#": "Test Node 3",
+			"implementation": {
+				"julia": "server/node3.jl"  
+			}
+		}			
 	]
   }
 }
