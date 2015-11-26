@@ -1,7 +1,7 @@
 machine:
   environment:
     CONTAINER_NAME: quay.io/redsift/sandbox-julia
-    NANO_MSG: 0.7-beta
+    NANO_MSG: 0.8-beta
   pre:
     - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
     - sudo chmod 0755 /usr/bin/docker  
@@ -10,8 +10,8 @@ machine:
 
 dependencies:
   override:
-    - curl -L  https://github.com/nanomsg/nanomsg/archive/$NANO_MSG.tar.gz | tar xz
-    - cd nanomsg-$NANO_MSG; sh autogen.sh && ./configure --prefix=$(readlink -f ./package) && make && make check && sudo make install && cp -r ./package/* ../root/. && mv ../root/include ../root/usr  
+    - cat ./circle/build-nanomsg | docker run -i -v ${CIRCLE_ARTIFACTS}:/artifacts --entrypoint=/bin/sh quay.io/redsift/buildos-ubuntu
+    - cp -r ${CIRCLE_ARTIFACTS}/root/* ./root/. 
     - docker info
     - docker build -t julia .
     

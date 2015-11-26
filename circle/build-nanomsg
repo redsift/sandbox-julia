@@ -1,0 +1,13 @@
+set -e
+
+cd /tmp
+
+curl -L  https://github.com/nanomsg/nanomsg/archive/$NANO_MSG.tar.gz | tar xz
+cd nanomsg-$NANO_MSG 
+sh autogen.sh 
+./configure --prefix=$(readlink -f ./package) 
+make
+make check
+sudo make install
+cp -r ./package/* /artifacts/. 
+mv /artifacts/include /artifacts/usr  
