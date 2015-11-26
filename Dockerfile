@@ -2,7 +2,7 @@ FROM ubuntu:15.04
 MAINTAINER Rahul Powar email: rahul@redsift.io version: 1.1.101
 
 ENV SIFT_ROOT="/run/dagger/sift" IPC_ROOT="/run/dagger/ipc"
-LABEL io.redsift.dagger.init="/usr/bin/redsift/install.jl" io.redsift.dagger.run="/usr/bin/redsift/bootstrap.jl"
+LABEL io.redsift.dagger.init="/usr/bin/redsift/install.jl" io.redsift.dagger.run="-J /run/dagger/sift/sift.ji /usr/bin/redsift/bootstrap.jl"
 
 # Fix for ubuntu to ensure /etc/default/locale is present
 RUN update-locale
@@ -28,4 +28,4 @@ VOLUME /run/dagger/sift
 
 WORKDIR /run/dagger/sift
 
-ENTRYPOINT [ "/usr/bin/julia", "-q", "-J", "/run/dagger/sift/sift.ji"  ]
+ENTRYPOINT [ "/usr/bin/julia", "-q"  ]
