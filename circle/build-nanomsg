@@ -8,6 +8,6 @@ sh autogen.sh
 ./configure --prefix=$(readlink -f ./package) 
 make
 make check
-sudo make install
+make install
 cp -r ./package/* /artifacts/. 
 mv /artifacts/include /artifacts/usr  
