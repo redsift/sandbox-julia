@@ -19,9 +19,11 @@ test:
   override:
     - |
       INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.init\" }}" julia)
+      echo "Calling init = $INIT"
       docker run -v $PWD/test:/run/dagger/sift julia $INIT
     - |
       RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.run\" }}" julia)
+      echo "Calling run = $RUN"
       docker run -v $PWD/test:/run/dagger/sift -e TEST=true julia $RUN 0 2
   
 deployment:

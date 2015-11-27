@@ -1,6 +1,52 @@
 import JSON
 import Nanomsg
 
+function toEncodedMessage(m)
+	if haskey(m, "value")
+		const v = m["value"]
+		in::AbstractString
+		if isa(v, Type{AbstractString})
+			in = v 
+		else
+			buf = IOBuffer() 
+			JSON.print(buf, v)
+			in = takebuf_string(buf)
+		end
+
+		out = IOBuffer() 
+		enc = Base64EncodePipe(out)
+		write(enc, in)
+		close(enc)
+		m["value"] = takebuf_string(out)
+	end
+	return m
+end
+
+function decodeValues(b)
+	for i in b["data"]
+		if haskey(i, "value")
+			dec = Base64DecodePipe(IOBuffer(i["value"]) )
+			out = readall(dec)
+			close(dec)
+			i["value"] = out
+		end
+	end
+end
+
+function fromEncodedMessage(m)
+	if haskey(m, "in")
+		decodeValues(m["in"])
+	end
+
+	if haskey(m, "with")
+		decodeValues(m["with"])
+	end
+	
+	return m
+end
+
+# --- Main
+
 if length(ARGS) == 0
 	throw(ArgumentError("No nodes to execute"))
 end
@@ -32,8 +78,8 @@ for istring in ARGS
 		throw("Node #$pos ($j) does not define compute()") 
 	end
 	
-	const addr = joinpath("ipc://$IPC_ROOT", "$pos.sock")
-	const sock = Nanomsg.Socket(Nanomsg.CSymbols.AF_SP, Nanomsg.CSymbols.NN_REP)
+	addr = joinpath("ipc://$IPC_ROOT", "$pos.sock")
+	sock = Nanomsg.Socket(Nanomsg.CSymbols.AF_SP, Nanomsg.CSymbols.NN_REP)
 	Nanomsg.connect(sock, addr)
 	push!(socks, sock)
 	push!(mods, mod)
@@ -45,23 +91,30 @@ end
 
 for (sock, i, r, w) in Nanomsg.poll(socks, true, false)
 	if r
+		tic()	
 		data = recv(sock)
-		dict = JSON.parse(IOBuffer(data))
-		# println("IN: from socket at index #$i ", dict)
-	
+				
 		out = Array{Dict}(0)
 		mod = mods[i]
-		
-		tic()	
-		res = mod.compute(dict)
-	
-		if isa(res, Dict)
-			push!(out, res)
-		else
-			for e in res
-				push!(out, e)
-			end	
+
+		try
+			dict = fromEncodedMessage(JSON.parse(IOBuffer(data)))
+
+			res = mod.compute(dict)
+
+			if isa(res, Dict)
+				push!(out, toEncodedMessage(res))
+			else
+				for e in res
+					push!(out, toEncodedMessage(e))
+				end	
+			end			
+		catch e
+			println("ERROR: handling node. Data: ", takebuf_string(IOBuffer(data)))
+			throw(e)
 		end
+	
+		
 		diff = toq()
 		
 		buf = IOBuffer() 

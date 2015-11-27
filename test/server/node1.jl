@@ -2,7 +2,10 @@ module Node1
 
 println("node1.jl")
 
-compute(data::Dict) = Dict("name" => "default", "key" => "some/thing")
+function compute(data::Dict)
+	println("Got data: ", data)
+	Dict("name" => "default", "key" => "some/thing", "value" => Dict("something" => "BOO0"))
+end
 
 end
 
