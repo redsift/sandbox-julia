@@ -8,4 +8,4 @@ if !isfile(ui)
 	ui = nothing
 end
 
-build_sysimg(joinpath(SIFT_ROOT, "sift.so"), "native", ui)
+build_sysimg(joinpath(SIFT_ROOT, "sysimg"), "native", ui)

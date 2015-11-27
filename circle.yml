@@ -17,8 +17,12 @@ dependencies:
     
 test:
   override:
-    - docker run -v $PWD/test:/run/dagger/sift julia /usr/bin/redsift/install.jl
-
+    - |
+      INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.init\" }}" julia)
+      docker run -v $PWD/test:/run/dagger/sift julia $INIT
+    - |
+      RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.run\" }}" julia)
+      docker run -v $PWD/test:/run/dagger/sift -e TEST=true julia $RUN 0 2
   
 deployment:
   production:

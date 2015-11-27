@@ -47,9 +47,10 @@ for (sock, i, r, w) in Nanomsg.poll(socks, true, false)
 	if r
 		data = recv(sock)
 		dict = JSON.parse(IOBuffer(data))
-		println("IN: from socket at index #$i ", dict)
+		# println("IN: from socket at index #$i ", dict)
 	
 		out = Array{Dict}(0)
+		mod = mods[i]
 		
 		tic()	
 		res = mod.compute(dict)
@@ -65,6 +66,6 @@ for (sock, i, r, w) in Nanomsg.poll(socks, true, false)
 		
 		buf = IOBuffer() 
 		JSON.print(buf, Dict("out" => out, "stats" => Dict("result" => diff)))
-		Nanomsg.send(sock, takebuf_array(buf), CSymbols.NN_NO_FLAG)
+		Nanomsg.send(sock, takebuf_array(buf), Nanomsg.CSymbols.NN_NO_FLAG)
 	end
 end	
