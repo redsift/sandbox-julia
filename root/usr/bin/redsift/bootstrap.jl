@@ -52,10 +52,11 @@ if length(ARGS) == 0
 end
 
 SIFT_ROOT = ENV["SIFT_ROOT"]
+SIFT_JSON = ENV["SIFT_JSON"]
 IPC_ROOT = ENV["IPC_ROOT"]
 DRY = get(ENV, "DRY", "false") == "true"
 
-sift = JSON.parsefile(joinpath(SIFT_ROOT, "sift.json"))
+sift = JSON.parsefile(joinpath(SIFT_ROOT, SIFT_JSON))
 
 socks = Array{Nanomsg.Socket}(0)
 mods = Array{Module}(0)
