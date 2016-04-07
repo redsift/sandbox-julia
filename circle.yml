@@ -8,8 +8,7 @@ machine:
     - docker
 
 dependencies:
-  override:
-    - cp -r ${CIRCLE_ARTIFACTS}/* ./root/. 
+  override: 
     - docker info
     - docker build -t julia .
     
