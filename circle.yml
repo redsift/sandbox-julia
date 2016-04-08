@@ -30,6 +30,10 @@ deployment:
       - docker login -e $QUAY_EMAIL -u $QUAY_USER -p $QUAY_PASS quay.io
       - | 
         VERSION=v$(docker run julia --version | cut -d' ' -f3)
+        MAJOR_NUMBER=(${VERSION//./ })
+        MAJOR_VERSION=$MAJOR_NUMBER
         echo "Tagging as $CONTAINER_NAME:$VERSION"
         docker tag julia:latest $CONTAINER_NAME:$VERSION
+        echo "Tagging as $CONTAINER_NAME:$MAJOR_VERSION"
+        docker tag julia:latest $CONTAINER_NAME:$MAJOR_VERSION
         docker push $CONTAINER_NAME 
