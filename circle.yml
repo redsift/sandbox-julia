@@ -3,32 +3,32 @@ machine:
     CONTAINER_NAME: quay.io/redsift/sandbox-julia
   pre:
     - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
-    - sudo chmod 0755 /usr/bin/docker  
+    - sudo chmod 0755 /usr/bin/docker
   services:
     - docker
 
 dependencies:
-  override: 
+  override:
     - docker info
     - docker build -t julia .
-    
+
 test:
   override:
     - |
-      INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.init\" }}" julia)
+      INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.sandbox.install\" }}" julia)
       echo "Calling init = $INIT"
       docker run -v $PWD/test:/run/dagger/sift julia $INIT
     - |
-      RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.run\" }}" julia)
+      RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.sandbox.run\" }}" julia)
       echo "Calling run = $RUN"
       docker run -v $PWD/test:/run/dagger/sift -e DRY=true julia $RUN 0 2
-  
+
 deployment:
   production:
-    branch: master  
+    branch: master
     commands:
       - docker login -e $QUAY_EMAIL -u $QUAY_USER -p $QUAY_PASS quay.io
-      - | 
+      - |
         VERSION=v$(docker run julia --version | cut -d' ' -f3)
         MAJOR_NUMBER=(${VERSION//./ })
         MAJOR_VERSION=$MAJOR_NUMBER
@@ -36,4 +36,4 @@ deployment:
         docker tag julia:latest $CONTAINER_NAME:$VERSION
         echo "Tagging as $CONTAINER_NAME:$MAJOR_VERSION"
         docker tag julia:latest $CONTAINER_NAME:$MAJOR_VERSION
-        docker push $CONTAINER_NAME 
+        docker push $CONTAINER_NAME

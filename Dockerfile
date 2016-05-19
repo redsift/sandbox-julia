@@ -2,6 +2,7 @@ FROM quay.io/redsift/sandbox:latest
 MAINTAINER Rahul Powar email: rahul@redsift.io version: 1.1.101
 
 LABEL io.redsift.dagger.init="/usr/bin/redsift/install.jl" io.redsift.dagger.run="-J /run/dagger/sift/sysimg.so /usr/bin/redsift/bootstrap.jl"
+LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.jl" io.redsift.sandbox.run="-J /run/dagger/sift/sysimg.so /usr/bin/redsift/bootstrap.jl"
 
 # Install nodejs and a minimal git + python + build tools as npm and node-gyp often needs it for modules
 RUN export DEBIAN_FRONTEND=noninteractive && \
