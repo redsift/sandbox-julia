@@ -1,4 +1,7 @@
 import JSON
+
+push!(LOAD_PATH, "/Users/deepakp/workspace/julia")
+
 import Nanomsg
 
 function toEncodedMessage(m)

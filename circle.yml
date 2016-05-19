@@ -17,11 +17,11 @@ test:
     - |
       INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.sandbox.install\" }}" julia)
       echo "Calling init = $INIT"
-      docker run -v $PWD/test:/run/dagger/sift julia $INIT
+      docker run -v $PWD/test:/run/sandbox/sift julia $INIT
     - |
       RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.sandbox.run\" }}" julia)
       echo "Calling run = $RUN"
-      docker run -v $PWD/test:/run/dagger/sift -e DRY=true julia $RUN 0 2
+      docker run -v $PWD/test:/run/sandbox/sift -e DRY=true julia $RUN 0 2
 
 deployment:
   production:
