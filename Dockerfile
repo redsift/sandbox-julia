@@ -17,4 +17,4 @@ COPY root /
 
 RUN julia -e "Pkg.add(\"JSON\");import JSON;Pkg.clone(\"https://github.com/Redsift/Nanomsg.jl\");import Nanomsg;"
 
-ENTRYPOINT [ "/usr/bin/julia", "-q"  ]
+ENTRYPOINT [ "/usr/bin/julia", "-q" ]
