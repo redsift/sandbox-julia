@@ -26,7 +26,7 @@ test:
       set -e
       RUN=$(docker inspect -f "{{index .Config.Labels \"io.redsift.sandbox.run\" }}" julia)
       echo "Calling run = $RUN"
-      docker run -u 7438:7438 -v $PWD/test:/run/sandbox/sift -e DRY=true julia $RUN 0 2
+      docker run -u 7438:7438 -v $PWD/test:/run/sandbox/sift:ro -e DRY=true julia $RUN 0 2
 
 deployment:
   production:

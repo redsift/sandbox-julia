@@ -1,7 +1,5 @@
 import JSON
 
-push!(LOAD_PATH, "/Users/deepakp/workspace/julia")
-
 import Nanomsg
 
 function toEncodedMessage(m)
@@ -9,14 +7,14 @@ function toEncodedMessage(m)
 		const v = m["value"]
 		in::AbstractString
 		if isa(v, Type{AbstractString})
-			in = v 
+			in = v
 		else
-			buf = IOBuffer() 
+			buf = IOBuffer()
 			JSON.print(buf, v)
 			in = takebuf_string(buf)
 		end
 
-		out = IOBuffer() 
+		out = IOBuffer()
 		enc = Base64EncodePipe(out)
 		write(enc, in)
 		close(enc)
@@ -44,7 +42,7 @@ function fromEncodedMessage(m)
 	if haskey(m, "with")
 		decodeValues(m["with"])
 	end
-	
+
 	return m
 end
 
@@ -63,12 +61,12 @@ sift = JSON.parsefile(joinpath(SIFT_ROOT, SIFT_JSON))
 
 socks = Array{Nanomsg.Socket}(0)
 mods = Array{Module}(0)
-	
+
 for istring in ARGS
 	pos = parse(Int, istring)
 	i = pos + 1
 	j = sift["dag"]["nodes"][i]["implementation"]["julia"]
-	
+
 	path = joinpath(SIFT_ROOT, j)
 	sym = symbol(path)
 	mod = Module(sym)
@@ -77,27 +75,27 @@ for istring in ARGS
 		eval(m, x) = Core.eval(m, x)
 		include($path)
 	end)
-	
+
 	if !isdefined(mod, :compute)
-		throw("Node #$pos ($j) does not define compute()") 
+		throw("Node #$pos ($j) does not define compute()")
 	end
-	
+
 	addr = joinpath("ipc://$IPC_ROOT", "$pos.sock")
 	sock = Nanomsg.Socket(Nanomsg.CSymbols.AF_SP, Nanomsg.CSymbols.NN_REP)
 	Nanomsg.connect(sock, addr)
 	push!(socks, sock)
 	push!(mods, mod)
 end
-	
+
 if DRY
 	exit(0)
 end
 
 for (sock, i, r, w) in Nanomsg.poll(socks, true, false)
 	if r
-		tic()	
+		tic()
 		data = recv(sock)
-				
+
 		out = Array{Dict}(0)
 		mod = mods[i]
 
@@ -111,18 +109,18 @@ for (sock, i, r, w) in Nanomsg.poll(socks, true, false)
 			else
 				for e in res
 					push!(out, toEncodedMessage(e))
-				end	
-			end			
+				end
+			end
 		catch e
 			println("ERROR: handling node. Data: ", takebuf_string(IOBuffer(data)))
 			throw(e)
 		end
-	
-		
+
+
 		diff = toq()
-		
-		buf = IOBuffer() 
+
+		buf = IOBuffer()
 		JSON.print(buf, Dict("out" => out, "stats" => Dict("result" => diff)))
 		Nanomsg.send(sock, takebuf_array(buf), Nanomsg.CSymbols.NN_NO_FLAG)
 	end
-end	
+end
