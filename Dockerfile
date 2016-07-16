@@ -15,6 +15,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 # Copy support files across
 COPY root /
 
+RUN chown -R sandbox:sandbox /usr/share/julia
+
 RUN julia -e "Pkg.add(\"JSON\");import JSON;Pkg.clone(\"https://github.com/Redsift/Nanomsg.jl\");import Nanomsg;"
 
 ENTRYPOINT [ "/usr/bin/julia", "-q" ]
