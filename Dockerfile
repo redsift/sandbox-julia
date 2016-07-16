@@ -16,6 +16,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 COPY root /
 
 RUN chown -R sandbox:sandbox /usr/share/julia
+RUN chown -R sandbox:sandbox $HOME/.julia
 
 RUN julia -e "Pkg.add(\"JSON\");import JSON;Pkg.clone(\"https://github.com/Redsift/Nanomsg.jl\");import Nanomsg;"
 
