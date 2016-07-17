@@ -1,11 +1,12 @@
 import JSON
 import Nanomsg
+import Compat: UTF8String, ASCIIString
 
 function toEncodedMessage(m)
 	if haskey(m, "value")
 		const v = m["value"]
 		in::AbstractString
-		if isa(v, Type{AbstractString})
+		if isa(v, Type{AbstractString}) || isa(v, Type{ASCIIString}) || isa(v, Type{UTF8String})
 			in = v
 		else
 			buf = IOBuffer()
