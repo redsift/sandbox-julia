@@ -6,7 +6,7 @@ function toEncodedMessage(m)
 	if haskey(m, "value")
 		const v = m["value"]
 		in::AbstractString
-		if isa(v, Type{AbstractString}) || isa(v, Type{ASCIIString}) || isa(v, Type{UTF8String})
+		if isa(v, AbstractString)
 			in = v
 		else
 			buf = IOBuffer()
