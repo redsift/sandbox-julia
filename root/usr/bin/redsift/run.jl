@@ -1,5 +1,4 @@
 import JSON
-
 import Nanomsg
 
 function toEncodedMessage(m)
