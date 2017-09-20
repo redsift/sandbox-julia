@@ -10,7 +10,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 	add-apt-repository -y ppa:staticfloat/juliareleases && \
 	apt-get update && \
 	apt-get install -y julia build-essential && \
-	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+	apt-get purge -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Copy support files across
 COPY root /
