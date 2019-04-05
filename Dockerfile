@@ -1,7 +1,7 @@
 FROM quay.io/redsift/sandbox:latest
 MAINTAINER Rahul Powar email: rahul@redsift.io version: 1.1.101
 
-LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.jl" io.redsift.sandbox.run="/usr/bin/redsift/run"
+LABEL io.redsift.sandbox.install="/usr/bin/redsift/install" io.redsift.sandbox.run="/usr/bin/redsift/run"
 
 # Copy support files across
 COPY root /
@@ -25,4 +25,4 @@ RUN set -eux; \
     julia -e "Pkg.add(\"JSON\");import JSON;Pkg.clone(\"https://github.com/Redsift/Nanomsg.jl\");import Nanomsg;"; \
     chown -R sandbox:sandbox $HOME/.julia
 
-ENTRYPOINT [ "julia", "-q" ]
+ENTRYPOINT [ "/bin/bash" ]

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec julia -q /usr/bin/redsift/install.jl $@
