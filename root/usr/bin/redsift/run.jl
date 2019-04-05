@@ -1,6 +1,5 @@
 import JSON
 import Nanomsg
-import Compat: UTF8String, ASCIIString
 
 function toEncodedMessage(m)
 	if haskey(m, "value")
@@ -68,7 +67,7 @@ for istring in ARGS
 	j = sift["dag"]["nodes"][i]["implementation"]["julia"]
 
 	path = joinpath(SIFT_ROOT, j)
-	sym = symbol(path)
+	sym = Symbol(path)
 	mod = Module(sym)
 	eval(mod, quote
 		eval(x) = Core.eval($sym, x)
