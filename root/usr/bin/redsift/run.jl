@@ -3,7 +3,7 @@ import Nanomsg
 
 function toEncodedMessage(m)
 	if haskey(m, "value")
-		const v = m["value"]
+		v = m["value"]
 		in::AbstractString
 		if isa(v, AbstractString)
 			in = v
@@ -69,10 +69,10 @@ for istring in ARGS
 	path = joinpath(SIFT_ROOT, j)
 	sym = Symbol(path)
 	mod = Module(sym)
-	eval(mod, quote
+	Core.eval(mod, quote
 		eval(x) = Core.eval($sym, x)
 		eval(m, x) = Core.eval(m, x)
-		include($path)
+		Base.include($path)
 	end)
 
 	if !isdefined(mod, :compute)
