@@ -36,7 +36,7 @@ jobs:
     executor: dockexec
     steps:
       - v_build:
-          sv: "0.6.4"
+          sv: "0.7.0"
           islatest: true
 
 workflows:
