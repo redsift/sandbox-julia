@@ -20,9 +20,9 @@ docker build -t $imageName -f Dockerfile.testing .
 TN="0 2 3"
 
 INIT=$(docker inspect -f '{{index .Config.Labels "io.redsift.sandbox.install" }}' $imageName)
-# echo "Calling init = $INIT"
+echo "Calling init = $INIT"
 # docker run --rm -u 7438:7438 $imageName $INIT $TN
 
 RUN=$(docker inspect -f '{{index .Config.Labels "io.redsift.sandbox.run" }}' $imageName)
 echo "Calling run = $RUN"
-echo "$INIT $TN; $RUN $TN" | docker run -i -u 7438:7438 -e DRY=true $imageName
+echo "set -x; $INIT $TN; $RUN $TN" | docker run -i -u 7438:7438 -e DRY=true $imageName
