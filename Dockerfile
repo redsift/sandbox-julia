@@ -23,6 +23,7 @@ RUN set -eux; \
     mv /usr/local/julia-* /usr/local/julia-$version; \
     julia -v; \
     julia -e "Pkg.add(\"JSON\");import JSON;Pkg.clone(\"https://github.com/Redsift/Nanomsg.jl\");import Nanomsg;"; \
+    chown -R sandbox:sandbox /usr/local/julia-$version; \
     chown -R sandbox:sandbox $HOME/.julia
 
 ENTRYPOINT [ "/bin/bash" ]
