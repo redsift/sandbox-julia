@@ -2,7 +2,7 @@ SIFT_ROOT = ENV["SIFT_ROOT"]
 
 si = joinpath(SIFT_ROOT, "sysimg.so")
 if !isfile(si)
-	include(joinpath(JULIA_HOME, Base.DATAROOTDIR, "julia", "build_sysimg.jl"))
+	include(joinpath(Sys.BINDIR, Base.DATAROOTDIR, "julia", "build_sysimg.jl"))
 
 	ui = joinpath(SIFT_ROOT, "server", "userimg.jl")
 	if !isfile(ui)
