@@ -1,0 +1,46 @@
+version: 2.1
+
+default:
+  environment: &envvars
+    CONTAINER_NAME: quay.io/redsift/sandbox-julia
+executors:
+  dockexec:
+    shell: /bin/bash
+    environment: *envvars
+    docker:
+      - image: cibuilds/docker:18.06.3-ce
+
+
+commands:
+  v_build:
+    parameters:
+      sv:
+        type: string
+      islatest:
+        type: boolean
+        default: false
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker login -u $QUAY_USER -p $QUAY_PASS quay.io
+      - run: ./circle/docker_build << parameters.sv >> << parameters.islatest >>
+      - run: ./circle/gen_testing_dockerfile << parameters.sv >>
+      - run: ./circle/docker_test << parameters.sv >>
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - circle
+
+jobs:
+  build_default:
+    executor: dockexec
+    steps:
+      - v_build:
+          sv: "0.6.4"
+          islatest: true
+
+workflows:
+  version: 2.1
+  build-and-deploy:
+    jobs:
+      - build_default
