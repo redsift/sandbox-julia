@@ -1,30 +1,29 @@
 {
   "dag": {
-    "nodes":[
-		{
-			"#": "Test Node 1",
-			"implementation": {
-				"julia": "server/node1.jl"  
-			}
-		},
-		{
-			"#": "Missing Node",
-			"implementation": {
-				"julia": "server/node-missing.jl"  
-			}
-		},
-		{
-			"#": "Test Node 2",
-			"implementation": {
-				"julia": "server/node2.jl"  
-			}
-		},
-		{
-			"#": "Test Node 3",
-			"implementation": {
-				"julia": "server/node3.jl"  
-			}
-		}			
-	]
+    "nodes": [{
+        "#": "Test Node 1",
+        "implementation": {
+          "julia": "server/node1.jl"
+        }
+      },
+      {
+        "#": "Missing Node",
+        "implementation": {
+          "julia": "server/node-missing.jl"
+        }
+      },
+      {
+        "#": "Test Node 2",
+        "implementation": {
+          "julia": "server/node2.jl"
+        }
+      },
+      {
+        "#": "Test Node 3",
+        "implementation": {
+          "julia": "server/node3.jl"
+        }
+      }
+    ]
   }
 }
