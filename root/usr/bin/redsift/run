@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec julia -J /run/sandbox/sift/sysimg.so /usr/bin/redsift/run.jl $@

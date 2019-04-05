@@ -1,7 +1,7 @@
 FROM quay.io/redsift/sandbox:latest
 MAINTAINER Rahul Powar email: rahul@redsift.io version: 1.1.101
 
-LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.jl" io.redsift.sandbox.run="-J /run/sandbox/sift/sysimg.so /usr/bin/redsift/run.jl"
+LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.jl" io.redsift.sandbox.run="/usr/bin/redsift/run"
 
 # Copy support files across
 COPY root /
