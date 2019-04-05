@@ -58,8 +58,8 @@ DRY = get(ENV, "DRY", "false") == "true"
 
 sift = JSON.parsefile(joinpath(SIFT_ROOT, SIFT_JSON))
 
-socks = Array{Nanomsg.Socket}(0)
-mods = Array{Module}(0)
+socks = Array{Nanomsg.Socket}(undef,0)
+mods = Array{Module}(undef,0)
 
 for istring in ARGS
 	pos = parse(Int, istring)
@@ -95,7 +95,7 @@ for (sock, i, r, w) in Nanomsg.poll(socks, true, false)
 		tic()
 		data = recv(sock)
 
-		out = Array{Dict}(0)
+		out = Array{Dict}(undef,0)
 		mod = mods[i]
 
 		try
