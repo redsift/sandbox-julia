@@ -16,7 +16,7 @@ imageName=$CONTAINER_NAME:v$jv$SUFFIX
 echo Building $imageName
 docker build --build-arg version=$jv -t $imageName .
 
-VERSION=$(docker run --rm -u 7438:7438 ${imageName} --version | cut -d' ' -f3)
+VERSION=$(docker run --rm --entrypoint=julia ${imageName} -version | cut -d' ' -f3)
 echo "Container reported Julia version: ${VERSION}"
 
 MinorV=$(echo $jv | sed "s/\(.*\)\.\(.*\)\..*/\1.\2/")
