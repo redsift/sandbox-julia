@@ -11,7 +11,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y software-properties-common build-essential wget && \
     apt-get purge -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG version=0.7.0
+ARG version=1.0.0
 
 ENV PATH "/usr/local/julia-${version}/bin:$PATH"
 RUN set -eux; \
@@ -21,7 +21,7 @@ RUN set -eux; \
     tar -C /usr/local -xzf julia.tgz; \
     rm julia.tgz; \
     julia -v; \
-    julia -e 'import Pkg;Pkg.add(Pkg.Types.PackageSpec(url="https://github.com/Redsift/Nanomsg.jl", rev="upgrade/v0.7")); Pkg.add("JSON");import JSON;import Nanomsg;'; \
+    julia -e 'import Pkg;Pkg.add(Pkg.Types.PackageSpec(url="https://github.com/Redsift/Nanomsg.jl", rev="upgrade/v0.7")); Pkg.add("JSON");Pkg.add("PackageCompiler");import JSON;import Nanomsg;'; \
     chown -R sandbox:sandbox /usr/local/julia-$version; \
     chown -R sandbox:sandbox $HOME/.julia
 

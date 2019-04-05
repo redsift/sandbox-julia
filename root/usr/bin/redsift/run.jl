@@ -72,7 +72,7 @@ for istring in ARGS
 	Core.eval(mod, quote
 		eval(x) = Core.eval($sym, x)
 		eval(m, x) = Core.eval(m, x)
-		Base.include($path)
+		Base.include(@__MODULE__, $path)
 	end)
 
 	if !isdefined(mod, :compute)
