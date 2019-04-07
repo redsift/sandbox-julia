@@ -21,7 +21,7 @@ RUN set -eux; \
     tar -C /usr/local -xzf julia.tgz; \
     rm julia.tgz; \
     julia -v; \
-    julia -e 'import Pkg;Pkg.add("https://github.com/Redsift/Nanomsg.jl"); Pkg.add("JSON");Pkg.add("PackageCompiler");import JSON;import Nanomsg;'; \
+    julia -e 'import Pkg;Pkg.add(Pkg.Types.PackageSpec(url="https://github.com/Redsift/Nanomsg.jl", rev="upgrade/v0.7")); Pkg.add("JSON");Pkg.add("PackageCompiler");import JSON;import Nanomsg;'; \
     chown -R sandbox:sandbox /usr/local/julia-$version; \
     chown -R sandbox:sandbox $HOME/.julia
 
