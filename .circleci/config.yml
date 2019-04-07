@@ -30,6 +30,8 @@ commands:
           root: ./
           paths:
             - circle
+      - deploy:
+          command: docker push $CONTAINER_NAME
 
 jobs:
   build_default:
