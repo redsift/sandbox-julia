@@ -17,7 +17,7 @@ ENV PATH "/usr/local/julia-${version}/bin:$PATH"
 RUN set -eux; \
     minor=$(echo $version | sed "s/\(.*\)\.\(.*\)\..*/\1.\2/") \
     url="https://julialang-s3.julialang.org/bin/linux/x64/${minor}/julia-${version}-linux-x86_64.tar.gz"; \
-    wget -O julia.tgz "$url"; \
+    wget -q -O julia.tgz "$url"; \
     tar -C /usr/local -xzf julia.tgz; \
     rm julia.tgz; \
     julia -v; \
