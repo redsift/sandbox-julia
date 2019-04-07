@@ -1,7 +1,7 @@
 using PackageCompiler
 SIFT_ROOT = ENV["SIFT_ROOT"]
 
-si = joinpath(SIFT_ROOT, "sysimg.so")
+si = joinpath(SIFT_ROOT, "sysimg","sys.so")
 if !isfile(si)
 	ui = joinpath(SIFT_ROOT, "server", "userimg.jl")
 	if !isfile(ui)
