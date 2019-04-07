@@ -30,13 +30,15 @@ commands:
           root: ./
           paths:
             - circle
+      - deploy:
+          command: docker push $CONTAINER_NAME
 
 jobs:
   build_default:
     executor: dockexec
     steps:
       - v_build:
-          sv: "0.6.4"
+          sv: "1.0.0"
           islatest: true
 
 workflows:
